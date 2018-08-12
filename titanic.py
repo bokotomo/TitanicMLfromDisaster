@@ -20,3 +20,12 @@ def get_test():
     print(df.describe())
     return df
 
+def get_gender_submission():
+    """
+    入力データの取得
+    """
+    df = pandas.read_csv('./data/gender_submission.csv', encoding="UTF-8")
+    print("gender_submission")
+    print(df.describe())
+    return df
+
