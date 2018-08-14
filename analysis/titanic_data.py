@@ -23,6 +23,8 @@ def get_test():
     df = pandas.read_csv(CURRENT_SCRIPT_PATH+'../data/test.csv', encoding="UTF-8")
     # 文字列を数字に変換
     df = df.replace('male', 0).replace('female', 1).replace("S",0).replace("C",1).replace("Q",2)
+    # 欠損を補完
+    __supplemente_missing_values(df)
     print("test")
     print(df.describe())
     return df
