@@ -5,7 +5,7 @@ sys.path.append(CURRENT_SCRIPT_PATH+'../')
 import titanic_data
 from sklearn.tree import DecisionTreeClassifier
 
-def convert_train(titanic_data, keys):
+def convert_train(titanic_data, keys=[]):
     """
     トレーニングデータの整形
     """
@@ -17,7 +17,7 @@ def convert_train(titanic_data, keys):
         data.append(x)
     return data, y
 
-def convert_test(titanic_data, keys):
+def convert_test(titanic_data, keys=[]):
     """
     テストデータの整形
     """
@@ -57,10 +57,13 @@ def main(args):
     train = train.fillna(0)
     test = test.fillna(0)
     # 要素一覧
-    keys = ['Age', 'Fare', 'Sex', 'Pclass', 'SibSp', 'Parch', 'Embarked']
+    keys_paterns = [
+        ['Age', 'Fare', 'Sex', 'Pclass', 'SibSp', 'Parch', 'Embarked'],
+        ['Age', 'Sex', 'Pclass', 'SibSp', 'Parch'],
+    ] 
     # 学習用に整形
-    train_data, y = convert_train(train, keys)
-    test_data = convert_test(test, keys)
+    train_data, y = convert_train(train, keys=keys_paterns[1])
+    test_data = convert_test(test, keys=keys_paterns[1])
 
     """
     学習
