@@ -46,6 +46,22 @@ def to_csv(test, predict):
     df = pandas.DataFrame(predict, PassengerIds, columns = ["Survived"])
     df.to_csv("./result.csv", index_label = ["PassengerId"])
 
+def show_result(test, predict):
+    """
+    一部表示
+    """
+    titles = {
+        0: '死亡',
+        1: '生存'
+    }
+    print('\n-------------------------------------------------------------')
+    print('*  予測結果 *')
+    print('-------------------------------------------------------------')
+    for index,df in test[:5].iterrows():
+        print(df)
+        print(titles[predict[index]])
+        print('-------------------------------------------------------------')
+
 def __supplemente_missing_values(df):
     """
     欠損を補完
