@@ -8,7 +8,7 @@ sys.path.append(CURRENT_SCRIPT_PATH+'../')
 import titanic_manager
 from sklearn.linear_model import LogisticRegression
 
-def convert_train(titanic_manager, keys=[]):
+def convert_train(train_df, keys=[]):
     """
     トレーニングデータの整形
     """
@@ -16,25 +16,25 @@ def convert_train(titanic_manager, keys=[]):
     data = []
 
     # 欠損の含まれる行を削除
-    titanic_manager = titanic_manager.dropna(subset=['Pclass', 'SibSp', 'Parch', 'Fare', 'Embarked'])
+    train_df = train_df.dropna(subset=['Pclass', 'SibSp', 'Parch', 'Fare', 'Embarked'])
 
-    for k,v in titanic_manager.iterrows():
+    for k,v in train_df.iterrows():
         x = [v[key] for key in keys]
         data.append(x)
         y.append(v['Survived'])
 
     return data, y
 
-def convert_test(titanic_manager, keys=[]):
+def convert_test(test_df, keys=[]):
     """
     テストデータの整形
     """
     data = []
 
     # 欠損を0に変換
-    titanic_manager = titanic_manager.fillna(0)
+    test_df = test_df.fillna(0)
 
-    for k,v in titanic_manager.iterrows():
+    for k,v in test_df.iterrows():
         x = [v[key] for key in keys]
         data.append(x)
 
