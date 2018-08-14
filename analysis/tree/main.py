@@ -72,8 +72,8 @@ def main(args):
         ['Age', 'Sex', 'Pclass', 'SibSp', 'Parch'],
     ] 
     # 学習用に整形
-    train, y = convert_train(train_df, keys=keys_paterns[0])
-    test = convert_test(test_df, keys=keys_paterns[0])
+    train, y = convert_train(train_df, keys=keys_paterns[1])
+    test = convert_test(test_df, keys=keys_paterns[1])
 
     """
     学習
