@@ -16,12 +16,9 @@ def convert_train(titanic_data, keys=[]):
     data = []
 
     # 欠損の含まれる行を削除
-    titanic_data = titanic_data.dropna(subset=['Pclass', 'SibSp', 'Parch'])
+    titanic_data = titanic_data.dropna(subset=['Pclass', 'SibSp', 'Parch', 'Fare', 'Embarked'])
 
     for k,v in titanic_data.iterrows():
-        # 欠損を補完
-        v = supplemente_missing_values(keys, v)
-
         x = [v[key] for key in keys]
         data.append(x)
         y.append(v['Survived'])
@@ -34,46 +31,14 @@ def convert_test(titanic_data, keys=[]):
     """
     data = []
 
+    # 欠損を0に変換
+    titanic_data = titanic_data.fillna(0)
+
     for k,v in titanic_data.iterrows():
-        # 欠損を補完
-        v = supplemente_missing_values(keys, v)
-
-        # 欠損を0に変換
-        for key in keys:
-            if v[key] == None or str(v[key]).lower() == "null" or str(v[key]).lower() == "nan":
-                v[key] = 0
-
         x = [v[key] for key in keys]
         data.append(x)
 
     return data
-
-def supplemente_missing_values(keys, v):
-    """
-    欠損を補完
-    """
-    if "Age" in keys:
-        if v["Age"] == None or str(v["Age"]).lower() == "null" or str(v["Age"]).lower() == "nan":
-            if "master" in v["Name"].lower():
-                v["Age"] = 5
-            elif "miss" in v["Name"].lower():
-                v["Age"] = 18
-            elif "mrs" in v["Name"].lower():
-                v["Age"] = 28
-            else:
-                v["Age"] = 30
-    if "Sex" in keys:
-        if v["Sex"] == None or str(v["Sex"]).lower() == "null" or str(v["Sex"]).lower() == "nan":
-            if "miss" in v["Name"].lower():
-                v["Sex"] = 1
-            elif "mrs" in v["Name"].lower():
-                v["Sex"] = 1
-            elif "mr" in v["Name"].lower():
-                v["Sex"] = 0
-            else:
-                v["Sex"] = 0
-
-    return v
 
 def show_result(test, predict):
     """
@@ -107,8 +72,8 @@ def main(args):
         ['Age', 'Sex', 'Pclass', 'SibSp', 'Parch'],
     ] 
     # 学習用に整形
-    train, y = convert_train(train_df, keys=keys_paterns[1])
-    test = convert_test(test_df, keys=keys_paterns[1])
+    train, y = convert_train(train_df, keys=keys_paterns[0])
+    test = convert_test(test_df, keys=keys_paterns[0])
 
     """
     学習
