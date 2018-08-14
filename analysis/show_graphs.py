@@ -1,7 +1,7 @@
 import sys
 import seaborn
 import matplotlib.pyplot as plt
-import titanic
+import titanic_data
 
 def pairplot(df=None, arr=[]):
     seaborn.pairplot(df[arr])
@@ -13,8 +13,8 @@ def barplot(df=None, x="", y=""):
     plt.show()
 
 def main(args):
-    train = titanic.get_train()
-    test = titanic.get_test()
+    train = titanic_data.get_train()
+    test = titanic_data.get_test()
     pairplot(df=train, arr=["Sex", "Survived"])
     #barplot(df=train, x="Embarked", y="Survived")
 
