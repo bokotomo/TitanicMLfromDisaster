@@ -36,7 +36,7 @@ def to_csv(test, predict):
     """
     CSVで書き出し
     """
-    PassengerId = numpy.array(test["PassengerId"]).astype(int)
-    df = pandas.DataFrame(predict, PassengerId, columns = ["Survived"])
+    PassengerIds = numpy.array(test["PassengerId"]).astype(int)
+    df = pandas.DataFrame(predict, PassengerIds, columns = ["Survived"])
     df.to_csv("./result.csv", index_label = ["PassengerId"])
 
