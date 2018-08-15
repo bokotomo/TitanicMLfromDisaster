@@ -1,5 +1,5 @@
 """
-K近傍法によって予測をする
+SVCによって予測をする
 """
 import sys
 from os import path
@@ -47,6 +47,7 @@ def main(args):
     # 要素一覧
     keys_paterns = [
         ['Age', 'Fare', 'Sex', 'Pclass', 'SibSp', 'Parch', 'Embarked'],
+        ['Age', 'Sex', 'Pclass', 'IsAlone', 'FamSize', 'Fare'],
         ['Age', 'Sex', 'Pclass', 'SibSp', 'Parch'],
     ] 
     # 学習用に整形
@@ -56,7 +57,7 @@ def main(args):
     """
     学習
     """
-    clf = SVC()
+    clf = SVC(kernel='linear', gamma=3)
     clf.fit(train, y)
 
     """

@@ -19,6 +19,11 @@ def get_train():
     # 欠損の含まれる行を削除
     df = df.dropna(subset=['Embarked'])
 
+    # 家族数の追加
+    df["FamSize"] = df["SibSp"] + df["Parch"] + 1
+    # 個人かどうかの追加
+    df["IsAlone"] = df.FamSize.apply(lambda x: 1 if x == 1 else 0)
+
     print("------ TRANING ------")
     print(df.describe())
     return df
@@ -35,6 +40,11 @@ def get_test():
     __supplemente_missing_values(df)
     # 欠損を0に変換
     df = df.fillna(0)
+
+    # 家族数の追加
+    df["FamSize"] = df["SibSp"] + df["Parch"] + 1
+    # 個人かどうかの追加
+    df["IsAlone"] = df.FamSize.apply(lambda x: 1 if x == 1 else 0)
 
     print("------ TEST ------")
     print(df.describe())
