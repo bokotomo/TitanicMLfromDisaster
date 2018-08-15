@@ -15,9 +15,6 @@ def convert_train(train_df, keys=[]):
     y = []
     data = []
 
-    # 欠損の含まれる行を削除
-    train_df = train_df.dropna(subset=['Pclass', 'SibSp', 'Parch', 'Fare', 'Embarked'])
-
     for k,v in train_df.iterrows():
         x = [v[key] for key in keys]
         data.append(x)
@@ -30,9 +27,6 @@ def convert_test(test_df, keys=[]):
     テストデータの整形
     """
     data = []
-
-    # 欠損を0に変換
-    test_df = test_df.fillna(0)
 
     for k,v in test_df.iterrows():
         x = [v[key] for key in keys]

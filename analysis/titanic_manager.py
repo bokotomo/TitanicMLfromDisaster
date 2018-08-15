@@ -1,3 +1,6 @@
+"""
+タイタニック問題のデータ取得やCSV吐き出しの処理をまとめたモジュール
+"""
 import pandas
 import numpy
 from os import path
@@ -8,11 +11,15 @@ def get_train():
     訓練データの取得
     """
     df = pandas.read_csv(CURRENT_SCRIPT_PATH+'../data/train.csv', encoding="UTF-8")
+
     # 文字列を数字に変換
     df = df.replace('male', 0).replace('female', 1).replace("S",0).replace("C",1).replace("Q",2)
     # 欠損を補完
     __supplemente_missing_values(df)
-    print("traning")
+    # 欠損の含まれる行を削除
+    df = df.dropna(subset=['Embarked'])
+
+    print("------ TRANING ------")
     print(df.describe())
     return df
 
@@ -21,11 +28,15 @@ def get_test():
     入力データの取得
     """
     df = pandas.read_csv(CURRENT_SCRIPT_PATH+'../data/test.csv', encoding="UTF-8")
+
     # 文字列を数字に変換
     df = df.replace('male', 0).replace('female', 1).replace("S",0).replace("C",1).replace("Q",2)
     # 欠損を補完
     __supplemente_missing_values(df)
-    print("test")
+    # 欠損を0に変換
+    df = df.fillna(0)
+
+    print("------ TEST ------")
     print(df.describe())
     return df
 
@@ -69,23 +80,26 @@ def __supplemente_missing_values(df):
 
     key = 'Age'
     for index,v in df[df[key].isnull()].iterrows():
-        if "master" in v["Name"].lower():
+        name = v["Name"].lower()
+        if "master" in name:
             df[key].iat[index] = 5
-        elif "miss" in v["Name"].lower():
+        elif "miss" in name:
             df[key].iat[index] = 18
-        elif "mrs" in v["Name"].lower():
+        elif "mrs" in name:
             df[key].iat[index] = 28
         else:
             df[key].iat[index] = 30
 
     key = 'Sex'
     for index,v in df[df[key].isnull()].iterrows():
-        if "miss" in v["Name"].lower():
+        name = v["Name"].lower()
+        if "miss" in name:
             df[key].iat[index] = 1
-        elif "mrs" in v["Name"].lower():
+        elif "mrs" in name:
             df[key].iat[index] = 1
-        elif "mr" in v["Name"].lower():
+        elif "mr" in name:
             df[key].iat[index] = 0
         else:
             df[key].iat[index] = 0
+
 

@@ -1,3 +1,6 @@
+"""
+グラフを表示して値を比較するモジュール
+"""
 import sys
 import seaborn
 import matplotlib.pyplot as plt
