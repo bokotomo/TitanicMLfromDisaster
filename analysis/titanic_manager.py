@@ -5,6 +5,7 @@ import pandas
 import numpy
 from os import path
 CURRENT_SCRIPT_PATH = path.dirname(path.abspath( __file__ ))+"/"
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
 def get_train():
     """
@@ -12,17 +13,15 @@ def get_train():
     """
     df = pandas.read_csv(CURRENT_SCRIPT_PATH+'../data/train.csv', encoding="UTF-8")
 
-    # 文字列を数字に変換
-    df = df.replace('male', 0).replace('female', 1).replace("S",0).replace("C",1).replace("Q",2)
     # 欠損を補完
     __supplemente_missing_values(df)
-    # 欠損の含まれる行を削除
-    df = df.dropna(subset=['Embarked'])
 
-    # 家族数の追加
-    df["FamSize"] = df["SibSp"] + df["Parch"] + 1
-    # 個人かどうかの追加
-    df["IsAlone"] = df.FamSize.apply(lambda x: 1 if x == 1 else 0)
+    # 欠損を変換
+    df = df.fillna({'Embarked': 'S'})
+    df = df.fillna(0)
+
+    # 新しいカラムを作成
+    __create_columns(df)
 
     print("------ TRANING ------")
     print(df.describe())
@@ -34,17 +33,15 @@ def get_test():
     """
     df = pandas.read_csv(CURRENT_SCRIPT_PATH+'../data/test.csv', encoding="UTF-8")
 
-    # 文字列を数字に変換
-    df = df.replace('male', 0).replace('female', 1).replace("S",0).replace("C",1).replace("Q",2)
     # 欠損を補完
     __supplemente_missing_values(df)
-    # 欠損を0に変換
+
+    # 欠損を変換
+    df = df.fillna({'Embarked': 'S'})
     df = df.fillna(0)
 
-    # 家族数の追加
-    df["FamSize"] = df["SibSp"] + df["Parch"] + 1
-    # 個人かどうかの追加
-    df["IsAlone"] = df.FamSize.apply(lambda x: 1 if x == 1 else 0)
+    # 新しいカラムを作成
+    __create_columns(df)
 
     print("------ TEST ------")
     print(df.describe())
@@ -83,11 +80,30 @@ def show_result(test, predict):
         print(titles[predict[index]])
         print('-------------------------------------------------------------')
 
+def __create_columns(df):
+    """
+    新しいカラムを作成
+    """
+    # 家族数の追加
+    df["FamSize"] = df["SibSp"] + df["Parch"] + 1
+    # 個人かどうかの追加
+    df["IsAlone"] = df.FamSize.apply(lambda x: 1 if x == 1 else 0)
+    # 名前の敬称の取得
+    df["Title"] = df['Name'].str.split(", ", expand=True)[1].str.split(".", expand=True)[0]
+    stat_min = 10
+    title_names = (df['Title'].value_counts() < stat_min)
+    df['Title'] = df['Title'].apply(lambda x: 'Misc' if title_names.loc[x] == True else x)
+    # 名前の敬称にONEHOT
+    df['Title'] = LabelEncoder().fit_transform(df['Title'])
+    # 性別にONEHOT
+    df['Sex'] = LabelEncoder().fit_transform(df['Sex'])
+    # 乗った場所にONEHOT
+    df['Embarked'] = LabelEncoder().fit_transform(df['Embarked'])
+
 def __supplemente_missing_values(df):
     """
     欠損を補完
     """
-
     key = 'Age'
     for index,v in df[df[key].isnull()].iterrows():
         name = v["Name"].lower()

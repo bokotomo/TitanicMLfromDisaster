@@ -47,7 +47,7 @@ def main(args):
     # 要素一覧
     keys_paterns = [
         ['Age', 'Fare', 'Sex', 'Pclass', 'SibSp', 'Parch', 'Embarked'],
-        ['Age', 'Sex', 'Pclass', 'IsAlone', 'FamSize', 'Fare'],
+        ['Age', 'Sex', 'Pclass', 'IsAlone', 'FamSize', 'Fare', 'Title'],
         ['Age', 'Sex', 'Pclass', 'SibSp', 'Parch'],
     ] 
     # 学習用に整形
