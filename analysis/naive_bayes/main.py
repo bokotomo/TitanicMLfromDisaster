@@ -1,5 +1,5 @@
 """
-K近傍法によって予測をする
+ナイーブベイズによって予測をする
 """
 import sys
 from os import path

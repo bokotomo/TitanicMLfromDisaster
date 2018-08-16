@@ -17,8 +17,8 @@ def get_train():
     __supplemente_missing_values(df)
 
     # 欠損を変換
-    df = df.fillna({'Embarked': 'S'})
-    df = df.fillna(0)
+    df.fillna({'Embarked': 'S'}, inplace=True)
+    df.fillna(0, inplace=True)
 
     # 新しいカラムを作成
     __create_columns(df)
@@ -37,8 +37,8 @@ def get_test():
     __supplemente_missing_values(df)
 
     # 欠損を変換
-    df = df.fillna({'Embarked': 'S'})
-    df = df.fillna(0)
+    df.fillna({'Embarked': 'S'}, inplace=True)
+    df.fillna(0, inplace=True)
 
     # 新しいカラムを作成
     __create_columns(df)
