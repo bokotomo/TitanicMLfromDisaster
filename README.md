@@ -1,5 +1,5 @@
 # TitanicMLfromDisaster
-いくつかの方法でタイタニックの生存問題を解く。
+いくつかの方法でタイタニックの生存問題を解く。  
 https://www.kaggle.com/c/titanic  
 
 # 手法

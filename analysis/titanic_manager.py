@@ -11,40 +11,16 @@ def get_train():
     """
     訓練データの取得
     """
-    df = pandas.read_csv(CURRENT_SCRIPT_PATH+'../data/train.csv', encoding="UTF-8")
-
-    # 欠損を補完
-    __supplemente_missing_values(df)
-
-    # 欠損を変換
-    df.fillna({'Embarked': 'S'}, inplace=True)
-    df.fillna(0, inplace=True)
-
-    # 新しいカラムを作成
-    __create_columns(df)
-
-    print("------ TRANING ------")
-    print(df.describe())
+    csv_path = CURRENT_SCRIPT_PATH+'../data/train.csv'
+    df = __get_analysis_df(csv_path=csv_path)
     return df
 
 def get_test():
     """
     入力データの取得
     """
-    df = pandas.read_csv(CURRENT_SCRIPT_PATH+'../data/test.csv', encoding="UTF-8")
-
-    # 欠損を補完
-    __supplemente_missing_values(df)
-
-    # 欠損を変換
-    df.fillna({'Embarked': 'S'}, inplace=True)
-    df.fillna(0, inplace=True)
-
-    # 新しいカラムを作成
-    __create_columns(df)
-
-    print("------ TEST ------")
-    print(df.describe())
+    csv_path = CURRENT_SCRIPT_PATH+'../data/test.csv'
+    df = __get_analysis_df(csv_path=csv_path)
     return df
 
 def get_gender_submission():
@@ -58,7 +34,7 @@ def get_gender_submission():
 
 def to_csv(test, predict):
     """
-    CSVで書き出し
+    コマンドを実行したディレクトリに、予測データであるCSVファイルを書き出す
     """
     PassengerIds = numpy.array(test["PassengerId"]).astype(int)
     df = pandas.DataFrame(predict, PassengerIds, columns = ["Survived"])
@@ -79,6 +55,25 @@ def show_result(test, predict):
         print(df)
         print(titles[predict[index]])
         print('-------------------------------------------------------------')
+
+def __get_analysis_df(csv_path=""):
+    """
+    csvデータを整形しdfに変換
+    """
+    df = pandas.read_csv(csv_path, encoding="UTF-8")
+
+    # 欠損を補完
+    __supplemente_missing_values(df)
+
+    # 欠損を変換
+    df.fillna({'Embarked': 'S'}, inplace=True)
+    df.fillna(0, inplace=True)
+
+    # 新しいカラムを作成
+    __create_columns(df)
+
+    print(df.describe())
+    return df
 
 def __create_columns(df):
     """
@@ -102,8 +97,9 @@ def __create_columns(df):
 
 def __supplemente_missing_values(df):
     """
-    欠損を補完
+    欠損を補完。参照渡しのdfを編集
     """
+    # 軽症から年齢を補完する
     key = 'Age'
     for index,v in df[df[key].isnull()].iterrows():
         name = v["Name"].lower()
@@ -116,6 +112,7 @@ def __supplemente_missing_values(df):
         else:
             df[key].iat[index] = 30
 
+    # 軽症から性別を補完する
     key = 'Sex'
     for index,v in df[df[key].isnull()].iterrows():
         name = v["Name"].lower()
@@ -127,5 +124,4 @@ def __supplemente_missing_values(df):
             df[key].iat[index] = 0
         else:
             df[key].iat[index] = 0
-
 
